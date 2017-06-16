@@ -1,0 +1,6 @@
+C:\Users\gebruiker\Desktop\Discord Bots\DatascienceAssignment1\DatascienceAssignment1\bin\Debug\DatascienceAssignment1.exe.config
+C:\Users\gebruiker\Desktop\Discord Bots\DatascienceAssignment1\DatascienceAssignment1\bin\Debug\DatascienceAssignment1.exe
+C:\Users\gebruiker\Desktop\Discord Bots\DatascienceAssignment1\DatascienceAssignment1\bin\Debug\DatascienceAssignment1.pdb
+C:\Users\gebruiker\Desktop\Discord Bots\DatascienceAssignment1\DatascienceAssignment1\obj\Debug\DatascienceAssignment1.csprojResolveAssemblyReference.cache
+C:\Users\gebruiker\Desktop\Discord Bots\DatascienceAssignment1\DatascienceAssignment1\obj\Debug\DatascienceAssignment1.exe
+C:\Users\gebruiker\Desktop\Discord Bots\DatascienceAssignment1\DatascienceAssignment1\obj\Debug\DatascienceAssignment1.pdb
