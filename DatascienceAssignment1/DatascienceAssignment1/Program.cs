@@ -11,12 +11,44 @@ namespace DatascienceAssignment1
         static Dictionary<string, Dictionary<string, double>> data = new Dictionary<string, Dictionary<string, double>>();
         static void Main(string[] args)
         {
-            processData();
-            int part = 1;
+            int part = 2;
             if (part == 1)
             {
+                //remove the reader.readline in processdata this is only for header clearance. There is no header in this file
+                processData("C:\\Users\\kevke6\\Desktop\\Datamining\\Datascience\\DatascienceAssignment1\\DatascienceAssignment1\\DataSource\\userItem.data");
                 TestMain();
             }
+            if (part == 2)
+            {
+                //add the reader.readline in processdata this is only for header clearance. There is a header in this file
+                processData("C:\\Users\\kevke6\\Desktop\\Datamining\\Datascience\\DatascienceAssignment1\\DatascienceAssignment1\\DataSource\\ratings.csv");
+                MoviePart();
+            }
+        }
+
+        static void MoviePart()
+        {
+            KeyValuePair<string, Dictionary<string, double>> person = data.Single(p => p.Key.Equals("186"));
+            List<KeyValuePair<string, Dictionary<string, double>>> personsForMeasure =
+                data.Select(p => p).Where(p => !p.Key.Contains("186")).ToList();
+            Dictionary<string, double> pearsonOutcome = calculatePearson(person, personsForMeasure);
+            Dictionary<string, double> nearestNeighborP = showNearestNeighbors(pearsonOutcome, 0.35, 25);
+            List<string> items = data.Where(d => nearestNeighborP.Any(n => n.Key.Equals(d.Key))).SelectMany(d => d.Value.Keys).Distinct().Except(person.Value.Keys).ToList();
+            Dictionary<string, double> predictedRating = calculatePredictedRating(person, nearestNeighborP, items);
+            List<KeyValuePair<string, double>> orderedRatings = predictedRating.OrderByDescending(p => p.Value).ToList();
+            for (int i = 0; i< 8; i++)
+            {
+                Console.WriteLine("Top " + i + ": product " + orderedRatings[i].Key + " with rating: " + orderedRatings[i].Value);
+            }
+            Console.ReadLine();
+            items = data.Where(d => nearestNeighborP.Any(n => n.Key.Equals(d.Key)) && d.Value.Count() >= 3).SelectMany(d => d.Value.Keys).Distinct().Except(person.Value.Keys).ToList();
+            predictedRating = calculatePredictedRating(person, nearestNeighborP, items);
+            orderedRatings = predictedRating.OrderByDescending(p => p.Value).ToList();
+            for (int i = 0; i < 8; i++)
+            {
+                Console.WriteLine("Top " + i + ": product " + orderedRatings[i].Key + " with rating: " + orderedRatings[i].Value);
+            }
+            Console.ReadLine();
         }
 
         static void TestMain()
@@ -59,11 +91,11 @@ namespace DatascienceAssignment1
             itemForPredictList.Add("103");
             calculatePredictedRating(person, nearestNeighborP, itemForPredictList);
 
-            data["7"].Values["106"] = 5;
         }
 
-        static void calculatePredictedRating(KeyValuePair<string, Dictionary<string, double>> person, Dictionary<string, double> nearestNeigbors, List<string> itemForPredictList)
+        static Dictionary<string, double> calculatePredictedRating(KeyValuePair<string, Dictionary<string, double>> person, Dictionary<string, double> nearestNeigbors, List<string> itemForPredictList)
         {
+            Dictionary<string, double> preditedRating = new Dictionary<string, double>();
             if (nearestNeigbors != null) {
                 foreach (string item in itemForPredictList) {
                     double totalCoefficient = 0;
@@ -74,10 +106,11 @@ namespace DatascienceAssignment1
                         totalCoefficient += neighbor.Value;
                     }
                     double newRating = sumRatingUsers / totalCoefficient;
-                    Console.WriteLine("Rating" + newRating + " item:" + item);
-                    Console.ReadLine();
+                    preditedRating.Add(item, newRating);
+                    //Console.WriteLine("Rating " + newRating + " item:" + item);
                 }
             }
+            return preditedRating;
         }
 
         static Dictionary<string, double> showNearestNeighbors(Dictionary<string, double> simDictionary, double threshold, int neighbors)
@@ -155,12 +188,20 @@ namespace DatascienceAssignment1
                     n++;
 
                 }
-
-                avrSumXSumY = (sumX * sumY) / n;
-                avrSumXP2 = (sumX * sumX) / n;
-                avrSumYP2 = (sumY * sumY) / n;
-
-                correlation = (sumXY - avrSumXSumY) / (Math.Sqrt(sumXP2 - avrSumXP2) * Math.Sqrt(sumYP2 - avrSumYP2));
+                if (n > 0)
+                {
+                    avrSumXSumY = (sumX * sumY) / n;
+                    avrSumXP2 = (sumX * sumX) / n;
+                    avrSumYP2 = (sumY * sumY) / n;
+                }
+                if (sumXP2 - avrSumXP2 <= 0 || sumYP2 - avrSumYP2 <= 0)
+                {
+                    correlation = 0;
+                }
+                else
+                {
+                    correlation = (sumXY - avrSumXSumY) / (Math.Sqrt(sumXP2 - avrSumXP2) * Math.Sqrt(sumYP2 - avrSumYP2));
+                }
                 personOutcome.Add(person2.Key, correlation);
             }
 
@@ -187,9 +228,10 @@ namespace DatascienceAssignment1
             return euclideanOutcome;
         }
 
-        static void processData()
+        static void processData(string location)
         {
-            StreamReader reader = new StreamReader("C:\\Users\\gebruiker\\Desktop\\Discord Bots\\DatascienceAssignment1\\DatascienceAssignment1\\DataSource\\userItem.data");
+            StreamReader reader = new StreamReader(location);
+            reader.ReadLine();  //Removes the header for ratings.csv
             while (!reader.EndOfStream) {
                 string[] fileContent = reader.ReadLine().Split(',');
                 string userID = fileContent[0];

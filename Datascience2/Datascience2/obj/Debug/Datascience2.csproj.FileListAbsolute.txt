@@ -1,0 +1,6 @@
+C:\Users\kevke6\Desktop\Datamining\Datascience\Datascience2\Datascience2\bin\Debug\Datascience2.exe.config
+C:\Users\kevke6\Desktop\Datamining\Datascience\Datascience2\Datascience2\bin\Debug\Datascience2.exe
+C:\Users\kevke6\Desktop\Datamining\Datascience\Datascience2\Datascience2\bin\Debug\Datascience2.pdb
+C:\Users\kevke6\Desktop\Datamining\Datascience\Datascience2\Datascience2\obj\Debug\Datascience2.csprojResolveAssemblyReference.cache
+C:\Users\kevke6\Desktop\Datamining\Datascience\Datascience2\Datascience2\obj\Debug\Datascience2.exe
+C:\Users\kevke6\Desktop\Datamining\Datascience\Datascience2\Datascience2\obj\Debug\Datascience2.pdb
